@@ -1,3 +1,3 @@
-module github.com/furrychina/mobtech-mobpush
+module github.com/furrychina/mobtech-sdk-go
 
 go 1.22
