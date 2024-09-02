@@ -69,11 +69,11 @@ type PushNotify struct {
 	//注：开启个性化参数时必填
 	CustomParamDefaultContent string `json:"customParamDefaultContent"`
 	//Android通知消息对象
-	AndroidNotify AndroidNotify `json:"androidNotify"`
+	AndroidNotify *AndroidNotify `json:"androidNotify"`
 	//iOS通知消息对象
-	IosNotify IosNotify `json:"iosNotify"`
+	IosNotify *IosNotify `json:"iosNotify"`
 	//鸿蒙通知消息对象
-	HarmonyNotify HarmonyNotify `json:"harmonyNotify"`
+	HarmonyNotify *HarmonyNotify `json:"harmonyNotify"`
 	//是否是定时消息
 	//- 0：否（默认）
 	//- 1：是
@@ -165,6 +165,9 @@ type HarmonyNotify struct {
 // PushFactoryExtra 厂商通道扩展参数
 type PushFactoryExtra struct {
 	HuaweiExtra *HuaweiExtra `json:"huaweiExtra"`
+	XiaomiExtra *XiaomiExtra `json:"xiaomiExtra"`
+	OppoExtra   *OppoExtra   `json:"oppoExtra"`
+	VivoExtra   *VivoExtra   `json:"vivoExtra"`
 }
 type HuaweiExtra struct {
 	//消息类型
