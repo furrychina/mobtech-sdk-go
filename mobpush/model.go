@@ -5,12 +5,12 @@ type ClientConfig struct {
 }
 
 type PushObject struct {
-	Source     string      `json:"source"`
-	AppKey     string      `json:"appkey"`
-	PushTarget *PushTarget `json:"pushTarget"`
-	PushNotify *PushNotify `json:"pushNotify"`
+	Source           string            `json:"source"`
+	AppKey           string            `json:"appkey"`
+	PushTarget       *PushTarget       `json:"pushTarget"`
+	PushNotify       *PushNotify       `json:"pushNotify"`
+	PushFactoryExtra *PushFactoryExtra `json:"pushFactoryExtra"`
 }
-
 type PushTarget struct {
 	//推送目标类型
 	//- 1：广播
@@ -72,6 +72,8 @@ type PushNotify struct {
 	AndroidNotify AndroidNotify `json:"androidNotify"`
 	//iOS通知消息对象
 	IosNotify IosNotify `json:"iosNotify"`
+	//鸿蒙通知消息对象
+	HarmonyNotify HarmonyNotify `json:"harmonyNotify"`
 	//是否是定时消息
 	//- 0：否（默认）
 	//- 1：是
@@ -102,6 +104,22 @@ type AndroidNotify struct {
 	AndroidBadgeType int `json:"androidBadgeType"`
 	//角标数值
 	AndroidBadge int `json:"androidBadge"`
+	//TCP消息类别，当前仅华为机型支持可选枚举值：
+	//promo 营销推广
+	//recommendation 内容推荐
+	//social 社交动态
+	//call 通话
+	//email 邮件
+	//msg 即时聊天
+	//navigation 导航
+	//reminder 事项提醒
+	//service 财务
+	//alarm 闹钟/计时器
+	//stopwatch 秒表
+	//progress 进度
+	//location_sharing 位置共享
+	//注：参数为空时，默认赋值为：promo
+	NativeCategory string `json:"nativeCategory"`
 }
 type IosNotify struct {
 	Badge int `json:"badge"` // 角标
@@ -129,4 +147,66 @@ type Response struct {
 }
 type Result struct {
 	BatchId string `json:"batchId"`
+}
+
+// HarmonyNotify 鸿蒙通知消息对象
+// 渠道类型
+// - 0：未知类型
+// - 1：社交类型
+// - 2：服务类型
+// - 3：内容类型
+// - 4：实况类型
+// - 5：客户服务类型
+// - 65535：其他类型
+type HarmonyNotify struct {
+	SlotType int `json:"slotType"` // 通知栏消息样式
+}
+
+// PushFactoryExtra 厂商通道扩展参数
+type PushFactoryExtra struct {
+	HuaweiExtra *HuaweiExtra `json:"huaweiExtra"`
+}
+type HuaweiExtra struct {
+	//消息类型
+	//- LOW：资讯营销类
+	//- NORMAL：服务与通讯类
+	//注：资讯营销类的消息提醒方式为静默通知，仅在下拉通知栏展示。 服务与通讯类的消息提醒方式为锁屏+铃声+震动
+	Importance string `json:"importance"`
+	//作用一：完成自分类权益申请后，用于标识消息类型，确定消息提醒方式，对特定类型消息加快发送，取值如下：
+	//IM：即时聊天
+	//VOIP：音视频通话
+	//SUBSCRIPTION：订阅
+	//TRAVEL：出行
+	//HEALTH：健康
+	//WORK：工作事项提醒
+	//ACCOUNT：帐号动态
+	//EXPRESS：订单&物流
+	//FINANCE：财务
+	//DEVICE_REMINDER：设备提醒
+	//SYSTEM_REMINDER：系统提示
+	//MAIL：邮件
+	//PLAY_VOICE：语音播报（仅透传消息支持）
+	//MARKETING：内容推荐、新闻、财经动态、生活资讯、社交动态、调研、产品促销、功能推荐、运营活动（仅对内容进行标识，不会加快消息发送）
+	//作用二：申请特殊权限后，用于标识高优先级透传场景，取值如下：
+	//VOIP：音视频通话
+	//PLAY_VOICE：语音播报
+	Category string `json:"category"`
+}
+type XiaomiExtra struct {
+	//小米渠道Id 适配定制化渠道
+	ChannelId string `json:"channelId"`
+}
+type OppoExtra struct {
+	//OPPO渠道Id 适配定制化渠道
+	ChannelId string `json:"channelId"`
+}
+type VivoExtra struct {
+	//	VIVO消息类型
+	//- 0：运营类型消息
+	//- 1：系统类型消息
+	Classification int `json:"classification"`
+	//二级分类，传值参见二级分类标准中category说明
+	//1、填写category后，可以不填写classification、messageSort，但若填写classification、messageSort，请保证category与messageSort或classification是正确对应关系，否则返回错误码10097；
+	//2、赋值请按照消息分类规则填写，且必须大写；若传入错误无效的值，否则返回错误码10096；
+	Category string `json:"category"`
 }
