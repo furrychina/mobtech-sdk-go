@@ -159,7 +159,7 @@ type Result struct {
 // - 5：客户服务类型
 // - 65535：其他类型
 type HarmonyNotify struct {
-	SlotType int `json:"slotType"` // 通知栏消息样式
+	SlotType int `json:"slotType,omitempty"` // 通知栏消息样式
 }
 
 // PushFactoryExtra 厂商通道扩展参数
@@ -174,7 +174,7 @@ type HuaweiExtra struct {
 	//- LOW：资讯营销类
 	//- NORMAL：服务与通讯类
 	//注：资讯营销类的消息提醒方式为静默通知，仅在下拉通知栏展示。 服务与通讯类的消息提醒方式为锁屏+铃声+震动
-	Importance string `json:"importance"`
+	Importance string `json:"importance,omitempty"`
 	//作用一：完成自分类权益申请后，用于标识消息类型，确定消息提醒方式，对特定类型消息加快发送，取值如下：
 	//IM：即时聊天
 	//VOIP：音视频通话
@@ -197,19 +197,19 @@ type HuaweiExtra struct {
 }
 type XiaomiExtra struct {
 	//小米渠道Id 适配定制化渠道
-	ChannelId string `json:"channelId"`
+	ChannelId string `json:"channelId,omitempty"`
 }
 type OppoExtra struct {
 	//OPPO渠道Id 适配定制化渠道
-	ChannelId string `json:"channelId"`
+	ChannelId string `json:"channelId,omitempty"`
 }
 type VivoExtra struct {
 	//	VIVO消息类型
 	//- 0：运营类型消息
 	//- 1：系统类型消息
-	Classification int `json:"classification"`
+	Classification int `json:"classification,omitempty"`
 	//二级分类，传值参见二级分类标准中category说明
 	//1、填写category后，可以不填写classification、messageSort，但若填写classification、messageSort，请保证category与messageSort或classification是正确对应关系，否则返回错误码10097；
 	//2、赋值请按照消息分类规则填写，且必须大写；若传入错误无效的值，否则返回错误码10096；
-	Category string `json:"category"`
+	Category string `json:"category,omitempty"`
 }

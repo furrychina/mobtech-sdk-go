@@ -28,9 +28,7 @@ func NewNotify(title, content string, extrasMapList []ExtrasMap) *PushNotify {
 		Policy:        PolicyTCPFirst,
 		Plats:         []int{IOS, Android},
 		ExtrasMapList: extrasMapList,
-		AndroidNotify: &AndroidNotify{
-			NativeCategory: "msg",
-		},
+		AndroidNotify: &AndroidNotify{},
 	}
 }
 
@@ -63,6 +61,8 @@ func sendPush(pushObject *PushObject) (Response, error) {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("key", os.Getenv("MOB_PUSH_APP_KEY"))
 	req.Header.Set("sign", fmt.Sprintf("%x", sign))
+
+	fmt.Println(string(requestBody))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
