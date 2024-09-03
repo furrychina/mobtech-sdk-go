@@ -28,7 +28,9 @@ func NewNotify(title, content string, extrasMapList []ExtrasMap) *PushNotify {
 		Policy:        PolicyTCPFirst,
 		Plats:         []int{IOS, Android},
 		ExtrasMapList: extrasMapList,
-		AndroidNotify: &AndroidNotify{},
+		AndroidNotify: &AndroidNotify{
+			NativeCategory: "msg",
+		},
 	}
 }
 
@@ -62,8 +64,6 @@ func sendPush(pushObject *PushObject) (Response, error) {
 	req.Header.Set("key", os.Getenv("MOB_PUSH_APP_KEY"))
 	req.Header.Set("sign", fmt.Sprintf("%x", sign))
 
-	fmt.Println(string(requestBody))
-
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -76,7 +76,7 @@ func sendPush(pushObject *PushObject) (Response, error) {
 	}
 
 	// 打印响应体内容，便于调试
-	fmt.Println("Response Body:", string(body))
+	//fmt.Print("Response Body:", string(body))
 
 	defer resp.Body.Close()
 
