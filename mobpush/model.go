@@ -5,11 +5,11 @@ type ClientConfig struct {
 }
 
 type PushObject struct {
-	Source           string            `json:"source"`
-	AppKey           string            `json:"appkey"`
-	PushTarget       *PushTarget       `json:"pushTarget"`
-	PushNotify       *PushNotify       `json:"pushNotify"`
-	PushFactoryExtra *PushFactoryExtra `json:"pushFactoryExtra"`
+	Source           string           `json:"source"`
+	AppKey           string           `json:"appkey"`
+	PushTarget       *PushTarget      `json:"pushTarget"`
+	PushNotify       *PushNotify      `json:"pushNotify"`
+	PushFactoryExtra PushFactoryExtra `json:"pushFactoryExtra"`
 }
 type PushTarget struct {
 	//推送目标类型
@@ -164,10 +164,10 @@ type HarmonyNotify struct {
 
 // PushFactoryExtra 厂商通道扩展参数
 type PushFactoryExtra struct {
-	HuaweiExtra *HuaweiExtra `json:"huaweiExtra"`
-	XiaomiExtra *XiaomiExtra `json:"xiaomiExtra"`
-	OppoExtra   *OppoExtra   `json:"oppoExtra"`
-	VivoExtra   *VivoExtra   `json:"vivoExtra"`
+	HuaweiExtra HuaweiExtra `json:"huaweiExtra"`
+	XiaomiExtra XiaomiExtra `json:"xiaomiExtra"`
+	OppoExtra   OppoExtra   `json:"oppoExtra"`
+	VivoExtra   VivoExtra   `json:"vivoExtra"`
 }
 type HuaweiExtra struct {
 	//消息类型

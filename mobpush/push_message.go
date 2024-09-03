@@ -28,6 +28,9 @@ func NewNotify(title, content string, extrasMapList []ExtrasMap) *PushNotify {
 		Policy:        PolicyTCPFirst,
 		Plats:         []int{IOS, Android},
 		ExtrasMapList: extrasMapList,
+		AndroidNotify: &AndroidNotify{
+			NativeCategory: "msg",
+		},
 	}
 }
 
