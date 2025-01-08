@@ -14,10 +14,10 @@ const (
 	apiCreatePush = "http://api.push.mob.com/v3/push/createPush"
 )
 
-func NewMessage(target *PushTarget, notify *PushNotify) *PushObject {
+func NewMessage(appKey string, target *PushTarget, notify *PushNotify) *PushObject {
 	return &PushObject{
 		Source:     "webapi",
-		AppKey:     APPKey,
+		AppKey:     appKey,
 		PushTarget: target,
 		PushNotify: notify,
 	}
@@ -37,41 +37,33 @@ func NewNotify(title, content string, extrasMapList []ExtrasMap) *PushNotify {
 	}
 }
 
-func (o *PushObject) PushRid(pushObject *PushObject) (*Response, error) {
+func SendPush(appSecret string, pushObject *PushObject) (*Response, error) {
 	// 检查推送设备列表是否为空，空则跳过推送
 	if len(pushObject.PushTarget.Rids) == 0 {
 		return nil, nil
 	}
-	resp, err := sendPush(pushObject)
-	if err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
-func sendPush(pushObject *PushObject) (Response, error) {
 	// 构造推送消息
 	requestBody, _ := json.Marshal(pushObject)
 	// 将请求体和密钥拼接，生成签名
-	sign := md5.Sum(append(requestBody, []byte(APPSecret)...))
+	sign := md5.Sum(append(requestBody, []byte(appSecret)...))
 	// 发送请求
 	req, err := http.NewRequest("POST", apiCreatePush, bytes.NewBuffer(requestBody))
 	if err != nil {
-		return Response{}, err
+		return &Response{}, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("key", APPKey)
+	req.Header.Set("key", pushObject.AppKey)
 	req.Header.Set("sign", fmt.Sprintf("%x", sign))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return Response{}, err
+		return &Response{}, err
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return Response{}, err
+		return &Response{}, err
 	}
 
 	// 打印响应体内容，便于调试
@@ -87,7 +79,7 @@ func sendPush(pushObject *PushObject) (Response, error) {
 	// 将响应体转换为结构体
 	var result Response
 	if err := json.Unmarshal(body, &result); err != nil {
-		return Response{}, err
+		return &Response{}, err
 	}
-	return result, nil
+	return &result, nil
 }
