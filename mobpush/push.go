@@ -14,10 +14,9 @@ const (
 	apiCreatePush = "http://api.push.mob.com/v3/push/createPush"
 )
 
-func NewMessage(appKey string, target *PushTarget, notify *PushNotify) *PushObject {
+func NewMessage(target *PushTarget, notify *PushNotify) *PushObject {
 	return &PushObject{
 		Source:     "webapi",
-		AppKey:     appKey,
 		PushTarget: target,
 		PushNotify: notify,
 	}
@@ -37,11 +36,13 @@ func NewNotify(title, content string, extrasMapList []ExtrasMap) *PushNotify {
 	}
 }
 
-func SendPush(appSecret string, pushObject *PushObject) (*Response, error) {
+func SendPush(appKey, appSecret string, pushObject *PushObject) (*Response, error) {
 	// 检查推送设备列表是否为空，空则跳过推送
 	if len(pushObject.PushTarget.Rids) == 0 {
 		return nil, nil
 	}
+	// 设置APPKey
+	pushObject.AppKey = appKey
 	// 构造推送消息
 	requestBody, _ := json.Marshal(pushObject)
 	// 将请求体和密钥拼接，生成签名
@@ -52,7 +53,7 @@ func SendPush(appSecret string, pushObject *PushObject) (*Response, error) {
 		return &Response{}, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("key", pushObject.AppKey)
+	req.Header.Set("key", appKey)
 	req.Header.Set("sign", fmt.Sprintf("%x", sign))
 
 	client := &http.Client{}
