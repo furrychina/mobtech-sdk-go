@@ -1,3 +1,3 @@
 module github.com/furrychina/mobtech-sdk-go
 
-go 1.22
+go 1.24

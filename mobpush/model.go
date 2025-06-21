@@ -164,10 +164,10 @@ type HarmonyNotify struct {
 
 // PushFactoryExtra 厂商通道扩展参数
 type PushFactoryExtra struct {
-	HuaweiExtra HuaweiExtra `json:"huaweiExtra"`
-	XiaomiExtra XiaomiExtra `json:"xiaomiExtra"`
-	OppoExtra   OppoExtra   `json:"oppoExtra"`
-	VivoExtra   VivoExtra   `json:"vivoExtra"`
+	HuaweiExtra *HuaweiExtra `json:"huaweiExtra"`
+	XiaomiExtra *XiaomiExtra `json:"xiaomiExtra"`
+	OppoExtra   *OppoExtra   `json:"oppoExtra"`
+	VivoExtra   *VivoExtra   `json:"vivoExtra"`
 }
 type HuaweiExtra struct {
 	//消息类型
@@ -200,8 +200,21 @@ type XiaomiExtra struct {
 	ChannelId string `json:"channelId,omitempty"`
 }
 type OppoExtra struct {
-	//OPPO渠道Id 适配定制化渠道
-	ChannelId string `json:"channelId,omitempty"`
+	//指定下发的通道ID。
+	//通知栏通道（NotificationChannel），从Android9开始，Android设备发送通知栏消息必须要指定通道ID，（如果是快应用，必须带置顶的通道Id:OPPO PUSH推送）
+	// 默认为OPPO PUSH 提供的默认通道ID
+	ChannelId string `json:"channel_id,omitempty"`
+	//通知栏消息提醒等级取值定义
+	//1-通知栏
+	//2-通知栏+锁屏
+	//16-通知栏+锁屏+横幅+震动+铃声
+	//使用notifyLevel参数时，category参数必传，默认为2
+	NotifyLevel int `json:"notifyLevel,omitempty"`
+	//二级分类，传值参见二级分类标准中category说明
+	//1、填写category后，可以不填写classification、messageSort，但若填写classification、messageSort，请保证category与messageSort或classification是正确对应关系，否则返回错误码10097；
+	//2、赋值请按照消息分类规则填写，且必须大写；若传入错误无效的值，否则返回错误码10096；
+	Category    string `json:"category,omitempty"`
+	CallBackUrl string `json:"call_back_url,omitempty"`
 }
 type VivoExtra struct {
 	//	VIVO消息类型
